@@ -28,21 +28,21 @@ BYTE_FEATURES = ['mask', 'image']
 # Create a dictionary mapping feature names to `tf.Example`-compatible
 # shape and data type descriptors.
 features = {
-    'image': tf.FixedLenFeature(IMAGE_SIZE+[3], tf.string),
-    'mask': tf.FixedLenFeature([MAX_NUM_ENTITIES]+IMAGE_SIZE+[1], tf.string),
-    'x': tf.FixedLenFeature([MAX_NUM_ENTITIES], tf.float32),
-    'y': tf.FixedLenFeature([MAX_NUM_ENTITIES], tf.float32),
-    'shape': tf.FixedLenFeature([MAX_NUM_ENTITIES], tf.float32),
-    'color': tf.FixedLenFeature([MAX_NUM_ENTITIES, 3], tf.float32),
-    'visibility': tf.FixedLenFeature([MAX_NUM_ENTITIES], tf.float32),
+    'image': tf.io.FixedLenFeature(IMAGE_SIZE+[3], tf.string),
+    'mask': tf.io.FixedLenFeature([MAX_NUM_ENTITIES]+IMAGE_SIZE+[1], tf.string),
+    'x': tf.io.FixedLenFeature([MAX_NUM_ENTITIES], tf.float32),
+    'y': tf.io.FixedLenFeature([MAX_NUM_ENTITIES], tf.float32),
+    'shape': tf.io.FixedLenFeature([MAX_NUM_ENTITIES], tf.float32),
+    'color': tf.io.FixedLenFeature([MAX_NUM_ENTITIES, 3], tf.float32),
+    'visibility': tf.io.FixedLenFeature([MAX_NUM_ENTITIES], tf.float32),
 }
 
 
 def _decode(example_proto):
   # Parse the input `tf.Example` proto using the feature description dict above.
-  single_example = tf.parse_single_example(example_proto, features)
+  single_example = tf.io.parse_single_example(example_proto, features)
   for k in BYTE_FEATURES:
-    single_example[k] = tf.squeeze(tf.decode_raw(single_example[k], tf.uint8),
+    single_example[k] = tf.squeeze(tf.io.decode_raw(single_example[k], tf.uint8),
                                    axis=-1)
   return single_example
 

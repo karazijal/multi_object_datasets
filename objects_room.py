@@ -45,16 +45,16 @@ def feature_descriptions(max_num_entities):
     data type descriptors.
   """
   return {
-      'image': tf.FixedLenFeature(IMAGE_SIZE+[3], tf.string),
-      'mask': tf.FixedLenFeature([max_num_entities]+IMAGE_SIZE+[1], tf.string),
+      'image': tf.io.FixedLenFeature(IMAGE_SIZE+[3], tf.string),
+      'mask': tf.io.FixedLenFeature([max_num_entities]+IMAGE_SIZE+[1], tf.string),
   }
 
 
 def _decode(example_proto, features):
   # Parse the input `tf.Example` proto using a feature description dictionary.
-  single_example = tf.parse_single_example(example_proto, features)
+  single_example = tf.io.parse_single_example(example_proto, features)
   for k in BYTE_FEATURES:
-    single_example[k] = tf.squeeze(tf.decode_raw(single_example[k], tf.uint8),
+    single_example[k] = tf.squeeze(tf.io.decode_raw(single_example[k], tf.uint8),
                                    axis=-1)
   return single_example
 

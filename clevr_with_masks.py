@@ -28,26 +28,26 @@ BYTE_FEATURES = ['mask', 'image', 'color', 'material', 'shape', 'size']
 # Create a dictionary mapping feature names to `tf.Example`-compatible
 # shape and data type descriptors.
 features = {
-    'image': tf.FixedLenFeature(IMAGE_SIZE+[3], tf.string),
-    'mask': tf.FixedLenFeature([MAX_NUM_ENTITIES]+IMAGE_SIZE+[1], tf.string),
-    'x': tf.FixedLenFeature([MAX_NUM_ENTITIES], tf.float32),
-    'y': tf.FixedLenFeature([MAX_NUM_ENTITIES], tf.float32),
-    'z': tf.FixedLenFeature([MAX_NUM_ENTITIES], tf.float32),
-    'pixel_coords': tf.FixedLenFeature([MAX_NUM_ENTITIES, 3], tf.float32),
-    'rotation': tf.FixedLenFeature([MAX_NUM_ENTITIES], tf.float32),
-    'size': tf.FixedLenFeature([MAX_NUM_ENTITIES], tf.string),
-    'material': tf.FixedLenFeature([MAX_NUM_ENTITIES], tf.string),
-    'shape': tf.FixedLenFeature([MAX_NUM_ENTITIES], tf.string),
-    'color': tf.FixedLenFeature([MAX_NUM_ENTITIES], tf.string),
-    'visibility': tf.FixedLenFeature([MAX_NUM_ENTITIES], tf.float32),
+    'image': tf.io.FixedLenFeature(IMAGE_SIZE+[3], tf.string),
+    'mask': tf.io.FixedLenFeature([MAX_NUM_ENTITIES]+IMAGE_SIZE+[1], tf.string),
+    'x': tf.io.FixedLenFeature([MAX_NUM_ENTITIES], tf.float32),
+    'y': tf.io.FixedLenFeature([MAX_NUM_ENTITIES], tf.float32),
+    'z': tf.io.FixedLenFeature([MAX_NUM_ENTITIES], tf.float32),
+    'pixel_coords': tf.io.FixedLenFeature([MAX_NUM_ENTITIES, 3], tf.float32),
+    'rotation': tf.io.FixedLenFeature([MAX_NUM_ENTITIES], tf.float32),
+    'size': tf.io.FixedLenFeature([MAX_NUM_ENTITIES], tf.string),
+    'material': tf.io.FixedLenFeature([MAX_NUM_ENTITIES], tf.string),
+    'shape': tf.io.FixedLenFeature([MAX_NUM_ENTITIES], tf.string),
+    'color': tf.io.FixedLenFeature([MAX_NUM_ENTITIES], tf.string),
+    'visibility': tf.io.FixedLenFeature([MAX_NUM_ENTITIES], tf.float32),
 }
 
 
 def _decode(example_proto):
   # Parse the input `tf.Example` proto using the feature description dict above.
-  single_example = tf.parse_single_example(example_proto, features)
+  single_example = tf.io.parse_single_example(example_proto, features)
   for k in BYTE_FEATURES:
-    single_example[k] = tf.squeeze(tf.decode_raw(single_example[k], tf.uint8),
+    single_example[k] = tf.squeeze(tf.io.decode_raw(single_example[k], tf.uint8),
                                    axis=-1)
   return single_example
 

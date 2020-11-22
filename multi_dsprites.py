@@ -48,23 +48,23 @@ def feature_descriptions(max_num_entities, is_grayscale=False):
 
   num_channels = 1 if is_grayscale else 3
   return {
-      'image': tf.FixedLenFeature(IMAGE_SIZE+[num_channels], tf.string),
-      'mask': tf.FixedLenFeature(IMAGE_SIZE+[max_num_entities, 1], tf.string),
-      'x': tf.FixedLenFeature([max_num_entities], tf.float32),
-      'y': tf.FixedLenFeature([max_num_entities], tf.float32),
-      'shape': tf.FixedLenFeature([max_num_entities], tf.float32),
-      'color': tf.FixedLenFeature([max_num_entities, num_channels], tf.float32),
-      'visibility': tf.FixedLenFeature([max_num_entities], tf.float32),
-      'orientation': tf.FixedLenFeature([max_num_entities], tf.float32),
-      'scale': tf.FixedLenFeature([max_num_entities], tf.float32),
+      'image': tf.io.FixedLenFeature(IMAGE_SIZE+[num_channels], tf.string),
+      'mask': tf.io.FixedLenFeature(IMAGE_SIZE+[max_num_entities, 1], tf.string),
+      'x': tf.io.FixedLenFeature([max_num_entities], tf.float32),
+      'y': tf.io.FixedLenFeature([max_num_entities], tf.float32),
+      'shape': tf.io.FixedLenFeature([max_num_entities], tf.float32),
+      'color': tf.io.FixedLenFeature([max_num_entities, num_channels], tf.float32),
+      'visibility': tf.io.FixedLenFeature([max_num_entities], tf.float32),
+      'orientation': tf.io.FixedLenFeature([max_num_entities], tf.float32),
+      'scale': tf.io.FixedLenFeature([max_num_entities], tf.float32),
   }
 
 
 def _decode(example_proto, features):
   # Parse the input `tf.Example` proto using a feature description dictionary.
-  single_example = tf.parse_single_example(example_proto, features)
+  single_example = tf.io.parse_single_example(example_proto, features)
   for k in BYTE_FEATURES:
-    single_example[k] = tf.squeeze(tf.decode_raw(single_example[k], tf.uint8),
+    single_example[k] = tf.squeeze(tf.io.decode_raw(single_example[k], tf.uint8),
                                    axis=-1)
   # To return masks in the canonical [entities, height, width, channels] format,
   # we need to transpose the tensor axes.
